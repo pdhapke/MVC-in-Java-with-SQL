@@ -1,0 +1,98 @@
+
+
+<html>
+	<head>
+		<title>Student Database View</title>
+		<script> 
+		function getFullList() {
+		
+	    	var xhttp = new XMLHttpRequest();
+	 
+	   		xhttp.onreadystatechange = function() {
+		
+	     		if (this.readyState == 4 && this.status == 200) {
+	    	
+	    	 		document.getElementById("allStudents").innerHTML = this.responseText;
+	    	 		}
+	    	};
+			var userRequest =  'view' + '?seed=' + Math.random();
+	   		xhttp.open("POST", userRequest, true);
+	   		xhttp.send();
+	    }
+		//this is the add student section 
+		function prepAddStudent(){
+			document.getElementById('formDiv').innerHTML = [ 
+				"<h3> Fill out the form and submit to add a student to the database</h3>",
+			    "<form action='add' method='post'>",
+			        "<input type='submit' value='Add Student'><br>",
+			        "First name: <input id='fname' type='text' name='fname' required><br>", 
+			        "Last name: <input id='lname' type='text' name='lname' required><br>", 
+			        "Student ID: <input id='id' type='number' name='id' min='1000000' max='9999999' step='1' required><br>", 
+			        "Class Period: <input id='period' type='number' name='period' min='0' max='8' step='1' required><br>", 
+			    "</form> <br>"
+			    ].join(" ");
+		}
+		//async function to have the student added to the database not used, may be added later
+		function addStudent(){
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+				     	 document.getElementById("formDiv").innerHTML = this.responseText;
+				     	 getFullList(); 
+				}
+			}
+			var userRequestURL ='add';
+			xhttp.open("POST", userRequestURL, true);
+			var userRequest;
+			userRequest = new FormData();
+			userRequest.set('fname', document.getElementById("fname").value);
+			userRequest.set('lname', document.getElementById("lname").value);
+			userRequest.set('id', document.getElementById("id").value);
+			userRequest.set('period', document.getElementById("period").value);
+			xhttp.send(userRequest);
+			return false;
+		}
+		function prepModifyStudent(){
+			document.getElementById('formDiv').innerHTML = [ 
+				"<h3> Fill out the form and submit to modify a student in the database</h3>",
+			    "<form action='modify' method='post'>",
+			        "<input type='submit' value='Update Student' required><br>",
+			        "First name: <input id='fname' type='text' name='fname' required><br>", 
+			        "Last name: <input id='lname' type='text' name='lname' required><br>", 
+			        "Student ID: <input id='id' type='number' name='id' min='1000000' max='9999999' step='1' required><br>", 
+			        "Class Period: <input id='period' type='number' name='period' min='0' max='8' step='1' required><br>", 
+			    "</form> <br>"
+			    ].join(" ");
+		}
+		function prepDeleteStudent(){
+			document.getElementById('formDiv').innerHTML = [ 
+				"<h3> Fill out the form and submit to delete a student in the database</h3>",
+			    "<form action='delete' method='post'>",
+			        "<input type='submit' value='Delete Student' required><br>",
+			        "Student ID: <input id='id' type='number' name='id' min='1000000' max='9999999' step='1'><br>",
+			    "</form> <br>"
+			    ].join(" ");
+		}
+		 </script>
+	</head>
+	<body>
+	Please select a function to complete <br>
+	<button onclick="getFullList()">View the Database</button><br>
+	<button onclick="prepAddStudent()">Add a Student</button><br>
+	<button onclick="prepModifyStudent()">Edit a Student</button><br>
+	<button onclick="prepDeleteStudent()">Delete a Student</button><br>
+	<br>
+	
+	<div id="formDiv">
+	
+	</div>
+	
+	
+	<div id="allStudents">
+	
+	</div>
+	
+	
+
+	</body>
+</html>
